@@ -1,0 +1,115 @@
+# Guide de Déploiement — Générateur de Cours IA
+
+## Ce dont vous avez besoin avant de commencer
+
+1. Un compte GitHub (gratuit) : https://github.com/signup
+2. Un compte Railway (gratuit pour commencer) : https://railway.app
+3. Une clé API Anthropic : https://console.anthropic.com
+4. (Optionnel) Une clé API OpenAI : https://platform.openai.com
+
+
+## Étape 1 — Créer un dépôt GitHub
+
+1. Allez sur https://github.com et connectez-vous
+2. Cliquez sur le bouton vert "New" (en haut à gauche)
+3. Nom du dépôt : `generateur-cours`
+4. Laissez "Public" coché
+5. Cliquez "Create repository"
+6. GitHub vous montre une page avec des instructions. Gardez cette page ouverte.
+
+
+## Étape 2 — Envoyer les fichiers sur GitHub
+
+### Option A : Via l'interface GitHub (le plus simple)
+
+1. Sur la page de votre nouveau dépôt, cliquez "uploading an existing file"
+2. Glissez-déposez TOUS les fichiers du dossier `generateur-cours` :
+   - `app.py`
+   - `requirements.txt`
+   - `Procfile`
+   - `.env.example`
+   - Le dossier `templates/` (avec `index.html` dedans)
+3. En bas, cliquez "Commit changes"
+
+IMPORTANT : Assurez-vous que le dossier `templates/` est bien présent avec le fichier `index.html` dedans. Si GitHub ne permet pas d'uploader un dossier, créez-le manuellement :
+   - Cliquez "Add file" puis "Create new file"
+   - Dans le nom, tapez : `templates/index.html`
+   - Collez le contenu du fichier index.html
+   - Cliquez "Commit changes"
+
+
+## Étape 3 — Déployer sur Railway
+
+1. Allez sur https://railway.app et connectez-vous avec votre compte GitHub
+2. Cliquez "New Project"
+3. Choisissez "Deploy from GitHub repo"
+4. Sélectionnez votre dépôt `generateur-cours`
+5. Railway détecte automatiquement que c'est une app Python et commence le déploiement
+
+
+## Étape 4 — Configurer les clés API
+
+C'est l'étape la plus importante pour la sécurité :
+
+1. Dans Railway, cliquez sur votre service (le rectangle violet)
+2. Allez dans l'onglet "Variables"
+3. Ajoutez ces variables une par une :
+
+   Cliquez "+ New Variable" pour chaque :
+
+   | Variable              | Valeur                                    |
+   |-----------------------|-------------------------------------------|
+   | ANTHROPIC_API_KEY     | Votre clé (commence par sk-ant-...)       |
+   | SECRET_KEY            | Tapez n'importe quoi de long et aléatoire |
+
+   Si vous voulez aussi utiliser OpenAI, ajoutez :
+
+   | Variable              | Valeur                               |
+   |-----------------------|--------------------------------------|
+   | OPENAI_API_KEY        | Votre clé OpenAI (commence par sk-...) |
+
+4. Railway redéploie automatiquement après chaque variable ajoutée
+
+
+## Étape 5 — Obtenir votre lien
+
+1. Dans Railway, cliquez sur votre service
+2. Allez dans l'onglet "Settings"
+3. Dans la section "Networking", cliquez "Generate Domain"
+4. Railway vous donne un lien du type : `generateur-cours-xxxx.up.railway.app`
+5. C'est votre application ! Ouvrez ce lien dans votre navigateur.
+
+
+## Utilisation quotidienne
+
+1. Ouvrez votre lien dans le navigateur (fonctionne aussi sur téléphone)
+2. Uploadez vos PDF de référentiels (REAC, RC, notes...)
+3. Tapez le sujet du module
+4. Choisissez Claude ou GPT-4o
+5. Cliquez "Générer"
+6. Attendez 3-5 minutes
+7. Téléchargez le Word ou les blocs TTS
+
+
+## Coûts estimés
+
+- Railway : gratuit jusqu'à 5$/mois d'utilisation, puis ~5$/mois
+- API Claude (3 modules/jour) : ~60-120$/mois
+- API GPT-4o (3 modules/jour) : ~50-100$/mois
+
+Total estimé : 60-130$/mois selon l'usage
+
+
+## En cas de problème
+
+### "Application Error" ou page blanche
+Vérifiez que vos variables d'environnement sont bien configurées dans Railway (étape 4).
+
+### "Erreur API" lors de la génération
+Vérifiez que votre clé API est valide et que vous avez du crédit sur votre compte Anthropic ou OpenAI.
+
+### La génération s'arrête en cours de route
+C'est souvent un timeout. Railway a un timeout de 5 minutes par défaut. Si vos modules sont très longs, contactez le support Railway pour augmenter cette limite.
+
+### Besoin d'aide
+Copiez le message d'erreur et collez-le dans une conversation avec Claude en demandant de l'aide pour le debug.
